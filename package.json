@@ -1,8 +1,8 @@
 {
-  "name": "benchie",
+  "name": "ceramic-perf-suite",
   "version": "0.0.1",
   "private": true,
-  "description": "Naïve Ceramic benchmarking suite",
+  "description": "Measuring performance of Ceramic nodes",
   "type": "module",
   "scripts": {
     "build": "tsc --project .",
@@ -10,10 +10,10 @@
   },
   "keywords": [
     "ceramic",
-    "benchmark"
+    "benchmark",
+    "performance"
   ],
-  "author": "Sergey Ukustov <sergey@ukstv.me>",
-  "license": "ISC",
+  "license": "(MIT OR Apache-2.0)",
   "devDependencies": {
     "prettier": "^2.5.1",
     "typescript": "^4.5.5"

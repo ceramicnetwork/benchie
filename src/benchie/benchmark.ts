@@ -15,7 +15,7 @@ export interface IScenarioBuilder extends IMethodBuilder {
 }
 
 export interface IMethod {
-  run(body: Task, beforeEach?: Task): Promise<IScenarioStats>;
+  run(body: Task, beforeEach?: Task, afterEach?: Task): Promise<IScenarioStats>;
 }
 
 export interface IScenarioParams {
@@ -24,19 +24,26 @@ export interface IScenarioParams {
   method: IMethod;
   beforeAll?: Task;
   beforeEach?: Task;
+  afterAll?: Task;
+  afterEach?: Task;
 }
 
 export class Method implements IMethod {
-  constructor(readonly times: number, readonly warmup: number = 10) {}
+  constructor(readonly times: number, readonly warmup: number = 0) {}
 
-  async run(body: Task, beforeEach?: Task): Promise<IScenarioStats> {
+  async run(
+    body: Task,
+    beforeEach?: Task,
+    afterEach?: Task
+  ): Promise<IScenarioStats> {
     let samples: number[] = [];
-    for (let i = 0; i <= this.times + this.warmup; i++) {
+    for (let i = 0; i <= this.times + this.warmup - 1; i++) {
       if (beforeEach) await beforeEach();
       const before = Date.now();
       await body();
       const after = Date.now();
       samples.push(after - before);
+      if (afterEach) await afterEach();
     }
     samples.splice(0, this.warmup);
     return new ScenarioStats(samples);
@@ -51,6 +58,8 @@ export interface IScenario {
 export class Scenario implements IScenario {
   private readonly beforeAll?: Task;
   private readonly beforeEach?: Task;
+  private readonly afterAll?: Task;
+  private readonly afterEach?: Task;
   private readonly method: IMethod;
   private readonly body: Task;
   readonly title: string;
@@ -67,7 +76,15 @@ export class Scenario implements IScenario {
     if (this.beforeAll) {
       await this.beforeAll();
     }
-    return this.method.run(this.body, this.beforeEach);
+    const stats = await this.method.run(
+      this.body,
+      this.beforeEach,
+      this.afterEach
+    );
+    if (this.afterAll) {
+      await this.afterAll();
+    }
+    return stats;
   }
 }
 
@@ -98,6 +115,14 @@ export class ScenarioBuilder implements IScenarioBuilder {
 
   beforeEach(task: Task): void {
     this.params.beforeEach = task;
+  }
+
+  afterAll(task: Task): void {
+    this.params.afterAll = task;
+  }
+
+  afterEach(task: Task): void {
+    this.params.afterEach = task;
   }
 
   run(task: Task): void {

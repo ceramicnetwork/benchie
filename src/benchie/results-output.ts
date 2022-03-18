@@ -18,7 +18,7 @@ export class ResultsOutputText {
         console.log(`    mean: ${r.stats.mean.toString(3)}`);
         console.log(`    min: ${r.stats.min.toString(3)}`);
         console.log(`    max: ${r.stats.max.toString(3)}`);
-        console.log(`    error: ${r.stats.error.toString(3)}`);
+        // console.log(`    error: ${r.stats.error.toString(3)}`);
       }
     }
   }

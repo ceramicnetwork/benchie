@@ -24,6 +24,7 @@ scenario("Load stream that is pinned", (perform) => {
   });
 
   perform.times(1).run(async () => {
+    console.log('run')
     await TileDocument.load(ceramic, streamId);
   });
 });
