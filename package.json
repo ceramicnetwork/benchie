@@ -28,6 +28,7 @@
     "@types/node": "^17.0.21",
     "commander": "^9.0.0",
     "dids": "^2.4.3",
+    "dotenv": "^16.0.0",
     "fast-glob": "^3.2.11",
     "key-did-provider-ed25519": "^1.1.0",
     "key-did-resolver": "^1.4.4",

@@ -52,6 +52,8 @@ The results are printed to `STDOUT` by default. You could see additional options
 - `node ./dist/benchie/bin/benchie.js --help` or
 - `npm run start -- --help`.
 
+The configuration can be adjusted through your `.env` file. Defaults are provided in `.env.defaults`.
+
 ### Writing scenario
 
 A scenario file name should have a name conforming to `*.bench.ts` glob.

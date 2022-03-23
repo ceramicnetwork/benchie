@@ -1,10 +1,19 @@
 #!/usr/bin/env node
 
+import dotenv from "dotenv";
 import process from "node:process";
 import { Runner } from "../runner.js";
 import { program, Option } from "commander";
 import { ResultsOutputText } from "../results-output.js";
 import path from "node:path";
+
+dotenv.config({
+  path: ".env.defaults",
+});
+dotenv.config({
+  path: ".env",
+  override: true,
+});
 
 const cwd = new URL(`file://${process.cwd()}/`);
 
