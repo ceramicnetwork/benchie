@@ -4,23 +4,26 @@ import { StreamID } from "@ceramicnetwork/streamid";
 import { CeramicApi } from "@ceramicnetwork/common";
 import { scenario } from "./benchie/benchmark.js";
 
-scenario("Load stream that is pinned", (perform) => {
+scenario("Load stream over network", (perform) => {
   let streamId: StreamID;
   let ceramic: CeramicApi;
 
   perform.beforeAll(async () => {
-    ceramic = await createCeramic();
-  });
-
-  perform.beforeEach(async () => {
+    const secondaryCeramic = await createCeramic(
+      process.env.SECONDARY_CERAMIC_ENDPOINT
+    );
     const content0 = {
       foo: `hello-${Math.random()}`,
     };
-    const tile = await TileDocument.create(ceramic, content0);
+    const tile = await TileDocument.create(secondaryCeramic, content0, null, {
+      anchor: false,
+      pin: true,
+    });
     const content1 = { foo: `world-${Math.random()}` };
-    await tile.update(content1);
-    await ceramic.pin.add(tile.id);
+    await tile.update(content1, null, { anchor: false, pin: true });
+
     streamId = tile.id;
+    ceramic = await createCeramic(process.env.CERAMIC_ENDPOINT);
   });
 
   perform.times(1).run(async () => {
