@@ -3,7 +3,6 @@ import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { StreamID } from "@ceramicnetwork/streamid";
 import { CeramicApi } from "@ceramicnetwork/common";
 import { scenario } from "./benchie/benchmark.js";
-import { create } from "domain";
 
 scenario("Load stream over network", (perform) => {
   let streamId: StreamID;
