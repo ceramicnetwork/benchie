@@ -15,9 +15,9 @@ export class ResultsOutputText {
       console.log(filename);
       for (let r of results) {
         console.log(`  ${r.title}`);
-        console.log(`    mean: ${r.stats.mean.toString(3)}`);
-        console.log(`    min: ${r.stats.min.toString(3)}`);
-        console.log(`    max: ${r.stats.max.toString(3)}`);
+        console.log(`    mean: ${r.stats.mean.toFixed(0)}ms`);
+        console.log(`    min: ${r.stats.min.toFixed(0)}ms`);
+        console.log(`    max: ${r.stats.max.toFixed(0)}ms`);
         // console.log(`    error: ${r.stats.error.toString(3)}`);
       }
     }
