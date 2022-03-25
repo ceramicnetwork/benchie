@@ -25,7 +25,7 @@ scenario("Load stream across nodes", (perform) => {
 
   perform.beforeAll(async () => {
     ceramicLocal = await createCeramic();
-    ceramicRemote = await createCeramic(process.env.SECONDARY_CERAMIC_ENDPOINT);
+    ceramicRemote = await createCeramic("https://ceramic-dev.3boxlabs.com/");
   });
 
   perform.beforeEach(async () => {
@@ -41,7 +41,7 @@ scenario("Load stream across nodes", (perform) => {
     streamId = tile.id;
   });
 
-  perform.times(100).run(async () => {
+  perform.warmup(5).times(100).run(async () => {
     const fromLocal = await TileDocument.load(ceramicLocal, streamId);
     assertEqualState(fromLocal.state, expectedState);
   });

@@ -6,6 +6,7 @@ export type Task = () => Promise<void>;
 
 export interface IMethodBuilder {
   times(n: number): IMethodBuilder;
+  warmup(n: number): IMethodBuilder;
   run(task: Task): void;
 }
 
@@ -15,6 +16,8 @@ export interface IScenarioBuilder extends IMethodBuilder {
 }
 
 export interface IMethod {
+  warmup: number;
+  times: number;
   run(body: Task, beforeEach?: Task, afterEach?: Task): Promise<IScenarioStats>;
 }
 
@@ -29,7 +32,13 @@ export interface IScenarioParams {
 }
 
 export class Method implements IMethod {
-  constructor(readonly times: number, readonly warmup: number = 0) {}
+  times: number;
+  warmup: number;
+
+  constructor(times: number, warmup: number = 0) {
+    this.times = times;
+    this.warmup = warmup;
+  }
 
   async run(
     body: Task,
@@ -129,8 +138,21 @@ export class ScenarioBuilder implements IScenarioBuilder {
     this.params.body = task;
   }
 
+  warmup(n: number): IMethodBuilder {
+    if (this.params.method) {
+      this.params.method.warmup = n;
+    } else {
+      this.params.method = new Method(1, n);
+    }
+    return this;
+  }
+
   times(n: number): IMethodBuilder {
-    this.params.method = new Method(n);
+    if (this.params.method) {
+      this.params.method = new Method(n, 5);
+    } else {
+      this.params.method.times = n;
+    }
     return this;
   }
 }
