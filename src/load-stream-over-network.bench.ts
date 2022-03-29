@@ -16,6 +16,11 @@ scenario("Load stream over network", (perform) => {
     );
   });
 
+  perform.afterAll(async () => {
+    await primaryCeramic.close()
+    await secondaryCeramic.close()
+  })
+
   perform.beforeEach(async () => {
     const content0 = {
       foo: `hello-${Math.random()}`,
@@ -30,7 +35,7 @@ scenario("Load stream over network", (perform) => {
     streamId = tile.id;
   });
 
-  perform.times(100).run(async () => {
+  perform.times(10).run(async () => {
     await TileDocument.load(primaryCeramic, streamId);
   });
 });

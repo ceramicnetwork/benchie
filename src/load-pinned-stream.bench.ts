@@ -12,18 +12,24 @@ scenario("Load stream that is pinned", (perform) => {
     ceramic = await createCeramic();
   });
 
+  perform.afterAll(async () => {
+    await ceramic.close();
+  });
+
   perform.beforeEach(async () => {
     const content0 = {
       foo: `hello-${Math.random()}`,
     };
-    const tile = await TileDocument.create(ceramic, content0);
+    const tile = await TileDocument.create(ceramic, content0, undefined, {
+      anchor: false,
+    });
     const content1 = { foo: `world-${Math.random()}` };
-    await tile.update(content1);
+    await tile.update(content1, undefined, { anchor: false });
     await ceramic.pin.add(tile.id);
     streamId = tile.id;
   });
 
-  perform.times(100).run(async () => {
+  perform.times(10).run(async () => {
     await TileDocument.load(ceramic, streamId);
   });
 });
