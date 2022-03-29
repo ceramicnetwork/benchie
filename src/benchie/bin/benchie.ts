@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import process from "node:process";
 import { Runner } from "../runner.js";
 import { program, Option } from "commander";
-import { ResultsOutputText } from "../results-output.js";
+import { ResultsOutputText, ResultsOutputJSON } from "../results-output.js";
 import path from "node:path";
 
 dotenv.config({
@@ -44,13 +44,16 @@ async function main() {
 
   const runner = new Runner(dir);
   const results = await runner.run();
+  const currentDir = new URL(
+    `file://${path.resolve(new URL(".", cwd).pathname)}/`
+  );
   switch (options.format) {
     case "text": {
-      new ResultsOutputText(results, dir).print();
+      new ResultsOutputText(results, currentDir).print();
       break;
     }
     case "json": {
-      throw new Error(`JSON output is not supported yet`);
+      new ResultsOutputJSON(results, currentDir).print();
     }
   }
 }
