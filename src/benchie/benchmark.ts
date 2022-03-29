@@ -68,7 +68,9 @@ export class Scenario implements IScenario {
 
   constructor(params: IScenarioParams) {
     this.beforeAll = params.beforeAll;
+    this.afterAll = params.afterAll;
     this.beforeEach = params.beforeEach;
+    this.afterEach = params.afterEach;
     this.method = params.method;
     this.body = params.body;
     this.title = params.title;
@@ -103,7 +105,9 @@ export class ScenarioBuilder implements IScenarioBuilder {
       method: method,
       title: this.params.title,
       beforeEach: this.params.beforeEach,
+      afterEach: this.params.afterEach,
       beforeAll: this.params.beforeAll,
+      afterAll: this.params.afterAll,
     });
   }
 
