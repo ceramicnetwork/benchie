@@ -6,12 +6,17 @@ import { scenario } from "./benchie/benchmark.js";
 
 scenario("Load stream over network", (perform) => {
   let streamId: StreamID;
-  let ceramic: CeramicApi;
+  let primaryCeramic: CeramicApi;
+  let secondaryCeramic: CeramicApi;
 
   perform.beforeAll(async () => {
-    const secondaryCeramic = await createCeramic(
+    primaryCeramic = await createCeramic(process.env.CERAMIC_ENDPOINT);
+    secondaryCeramic = await createCeramic(
       process.env.SECONDARY_CERAMIC_ENDPOINT
     );
+  });
+
+  perform.beforeEach(async () => {
     const content0 = {
       foo: `hello-${Math.random()}`,
     };
@@ -23,10 +28,9 @@ scenario("Load stream over network", (perform) => {
     await tile.update(content1, null, { anchor: false, pin: true });
 
     streamId = tile.id;
-    ceramic = await createCeramic(process.env.CERAMIC_ENDPOINT);
   });
 
-  perform.times(1).run(async () => {
-    await TileDocument.load(ceramic, streamId);
+  perform.times(100).run(async () => {
+    await TileDocument.load(primaryCeramic, streamId);
   });
 });
