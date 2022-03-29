@@ -12,6 +12,8 @@ export interface IMethodBuilder {
 export interface IScenarioBuilder extends IMethodBuilder {
   beforeEach(task: Task): void;
   beforeAll(task: Task): void;
+  afterAll(task: Task): void;
+  afterEach(task: Task): void;
 }
 
 export interface IMethod {
