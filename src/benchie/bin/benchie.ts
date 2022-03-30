@@ -14,6 +14,10 @@ dotenv.config({
   path: ".env",
   override: true,
 });
+dotenv.config({
+  path: ".env.local",
+  override: true,
+});
 
 const cwd = new URL(`file://${process.cwd()}/`);
 
