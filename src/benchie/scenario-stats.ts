@@ -13,6 +13,7 @@ function calculateMean(samples: number[]) {
 // }
 
 export interface IScenarioStats {
+  samples: number[]
   readonly mean: number;
   // readonly error: number;
   readonly max: number;
@@ -25,7 +26,7 @@ export class ScenarioStats implements IScenarioStats {
   readonly max: number;
   readonly min: number;
 
-  constructor(private readonly samples: number[]) {
+  constructor(readonly samples: number[]) {
     this.mean = calculateMean(samples);
     // this.error = calculateError(samples, this.mean);
     this.max = samples.reduce((a, b) => (a > b ? a : b));
