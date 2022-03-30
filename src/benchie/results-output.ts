@@ -40,13 +40,15 @@ export class ResultsOutputJSON {
     for (let [href, results] of grouped.entries()) {
       const filepath = new URL(href);
       const filename = filepath.href.replace(this.dir.href, "");
+      output[filename] = {};
       for (let r of results) {
-        output[filename] = {
-          title: r.title,
-          mean: r.stats.mean.toFixed(3),
-          min: r.stats.min.toFixed(3),
-          max: r.stats.max.toFixed(3),
-        };
+        Object.assign(output[filename], {
+          [r.title]: {
+            mean: r.stats.mean.toFixed(3),
+            min: r.stats.min.toFixed(3),
+            max: r.stats.max.toFixed(3),
+          },
+        });
       }
     }
     console.log(JSON.stringify(output, null, 2));
