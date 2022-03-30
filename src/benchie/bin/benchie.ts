@@ -44,9 +44,7 @@ async function main() {
 
   const runner = new Runner(dir);
   const results = await runner.run();
-  const currentDir = new URL(
-    `file://${path.resolve(new URL(".", cwd).pathname)}/`
-  );
+  const currentDir = new URL(".", cwd);
   switch (options.format) {
     case "text": {
       new ResultsOutputText(results, currentDir).print();
