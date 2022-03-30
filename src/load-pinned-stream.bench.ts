@@ -29,7 +29,7 @@ scenario("Load stream that is pinned", (perform) => {
     streamId = tile.id;
   });
 
-  perform.times(10).run(async () => {
+  perform.times(50).run(async () => {
     await TileDocument.load(ceramic, streamId);
   });
 });

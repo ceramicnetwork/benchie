@@ -35,7 +35,7 @@ scenario("Load stream over network", (perform) => {
     streamId = tile.id;
   });
 
-  perform.times(10).run(async () => {
+  perform.times(50).run(async () => {
     await TileDocument.load(primaryCeramic, streamId);
   });
 });

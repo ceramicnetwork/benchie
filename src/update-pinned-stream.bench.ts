@@ -25,7 +25,7 @@ scenario("Update stream that is pinned", (perform) => {
     });
   });
 
-  perform.times(10).run(async () => {
+  perform.times(50).run(async () => {
     const content1 = { foo: `world-${Math.random()}` };
     await tile.update(content1, undefined, { anchor: false });
   });
