@@ -25,8 +25,8 @@ program
   .name("benchie")
   .description("Measure performance of a Ceramic node")
   .option(
-    "-d, --dir [dir]",
-    "Directory to parse, default is current working dir",
+    "-p, --pattern [filename, dirname, or glob]",
+    "Pattern (filename, dirname, or glob) to match against files in your project to determine which ones to parse. You may need to quote this argument.",
     "."
   )
   .addOption(
@@ -38,13 +38,12 @@ program
 
 async function main() {
   const options = program.opts();
-  const dir = new URL(
-    `file://${path.resolve(new URL(options.dir, cwd).pathname)}/`
-  );
 
-  const runner = new Runner(dir);
+  const runner = new Runner(options.pattern);
   const results = await runner.run();
-  const currentDir = new URL(".", cwd);
+  const currentDir = new URL(
+    `file://${path.resolve(new URL(".", cwd).pathname)}/`
+  );
   switch (options.format) {
     case "text": {
       new ResultsOutputText(results, currentDir).print();
