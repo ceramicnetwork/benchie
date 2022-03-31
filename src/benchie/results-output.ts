@@ -44,6 +44,7 @@ export class ResultsOutputJSON {
       for (let r of results) {
         Object.assign(output[filename], {
           [r.title]: {
+            samples: r.stats.samples,
             mean: r.stats.mean.toFixed(3),
             min: r.stats.min.toFixed(3),
             max: r.stats.max.toFixed(3),
