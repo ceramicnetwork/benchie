@@ -38,6 +38,7 @@ const getFiles = async (pattern: string): Promise<string[]> => {
     globs.push(pattern);
   }
 
+  console.log('globs', globs)
   const allFiles = await glob(globs, {
     absolute: true,
     onlyFiles: true,
