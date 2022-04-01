@@ -10,7 +10,7 @@ import fs from "fs";
 
 const createFileGlob = (pattern: string, absolutePath: string): string => {
   // if the pattern is not a path create a glob that returns files that include the pattern
-  if (path.basename(pattern) === pattern) {
+  if (path.basename(pattern) === pattern && pattern !== ".") {
     const dir = path.dirname(absolutePath);
     const base = path.basename(absolutePath);
 
