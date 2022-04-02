@@ -2,9 +2,11 @@ import { createCeramic } from "./create-ceramic.js";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { StreamID } from "@ceramicnetwork/streamid";
 import { CeramicApi } from "@ceramicnetwork/common";
-import { tagged } from "./benchie/benchmark.js";
+import { scenario } from "./benchie/benchmark.js";
 
-tagged("multi-node").scenario("Load stream over network", (perform) => {
+scenario("Load stream over network", (perform) => {
+  perform.tagged("multi-node");
+
   let streamId: StreamID;
   let primaryCeramic: CeramicApi;
   let secondaryCeramic: CeramicApi;

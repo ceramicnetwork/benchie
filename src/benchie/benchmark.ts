@@ -10,6 +10,7 @@ export interface IMethodBuilder {
 }
 
 export interface IScenarioBuilder extends IMethodBuilder {
+  tagged(...tags: string[]): IScenarioBuilder;
   beforeEach(task: Task): void;
   beforeAll(task: Task): void;
   afterAll(task: Task): void;
@@ -136,6 +137,11 @@ export class ScenarioBuilder implements IScenarioBuilder {
     this.params.afterEach = task;
   }
 
+  tagged(...tags: string[]): this {
+    this.params.tags = new Set(tags);
+    return this;
+  }
+
   run(task: Task): void {
     this.params.body = task;
   }
@@ -146,27 +152,11 @@ export class ScenarioBuilder implements IScenarioBuilder {
   }
 }
 
-function buildScenario(
-  builder: ScenarioBuilder,
-  fn: (builder: IScenarioBuilder) => void
-) {
-  fn(builder);
-  scenarios.push(builder.scenario);
-}
-
-export function tagged(...tags: string[]): { scenario: typeof scenario } {
-  return {
-    scenario: (title, fn) => {
-      const builder = new ScenarioBuilder(title, new Set(tags));
-      buildScenario(builder, fn);
-    },
-  };
-}
-
 export function scenario(
   title: string,
   fn: (builder: IScenarioBuilder) => void
 ) {
   const builder = new ScenarioBuilder(title, new Set());
-  buildScenario(builder, fn);
+  fn(builder);
+  scenarios.push(builder.scenario);
 }

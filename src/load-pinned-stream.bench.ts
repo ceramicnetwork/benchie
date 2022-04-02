@@ -2,9 +2,11 @@ import { createCeramic } from "./create-ceramic.js";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { StreamID } from "@ceramicnetwork/streamid";
 import { CeramicApi } from "@ceramicnetwork/common";
-import { tagged } from "./benchie/benchmark.js";
+import { scenario } from "./benchie/benchmark.js";
 
-tagged("single-node").scenario("Load stream that is pinned", (perform) => {
+scenario("Load stream that is pinned", (perform) => {
+  perform.tagged("single-node");
+
   let streamId: StreamID;
   let ceramic: CeramicApi;
 

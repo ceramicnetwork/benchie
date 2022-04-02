@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc --project .",
-    "start": "node ./dist/benchie/bin/benchie.js"
+    "start": "node ./dist/benchie/bin/benchie.js --tags single-node"
   },
   "keywords": [
     "ceramic",
