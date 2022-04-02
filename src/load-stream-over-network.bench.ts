@@ -17,9 +17,9 @@ scenario("Load stream over network", (perform) => {
   });
 
   perform.afterAll(async () => {
-    await primaryCeramic.close()
-    await secondaryCeramic.close()
-  })
+    await primaryCeramic.close();
+    await secondaryCeramic.close();
+  });
 
   perform.beforeEach(async () => {
     const content0 = {
@@ -28,9 +28,14 @@ scenario("Load stream over network", (perform) => {
     const tile = await TileDocument.create(secondaryCeramic, content0, null, {
       anchor: false,
       pin: true,
+      publish: false,
     });
     const content1 = { foo: `world-${Math.random()}` };
-    await tile.update(content1, null, { anchor: false, pin: true });
+    await tile.update(content1, null, {
+      anchor: false,
+      pin: true,
+      publish: false,
+    });
 
     streamId = tile.id;
   });

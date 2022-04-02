@@ -30,11 +30,16 @@ scenario("Load stream with many commits over network", (perform) => {
     const tile = await TileDocument.create(secondaryCeramic, content0, null, {
       anchor: false,
       pin: true,
+      publish: false,
     });
 
     for (let i = 0; i < NUMBER_OF_COMMITS; i++) {
       const content1 = { foo: `world-${Math.random()}` };
-      await tile.update(content1, null, { anchor: false, pin: true });
+      await tile.update(content1, null, {
+        anchor: false,
+        pin: true,
+        publish: false,
+      });
     }
 
     streamId = tile.id;

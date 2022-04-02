@@ -22,11 +22,12 @@ scenario("Update stream that is pinned", (perform) => {
     tile = await TileDocument.create(ceramic, content0, null, {
       pin: true,
       anchor: false,
+      publish: false,
     });
   });
 
   perform.times(50).run(async () => {
     const content1 = { foo: `world-${Math.random()}` };
-    await tile.update(content1, undefined, { anchor: false });
+    await tile.update(content1, undefined, { anchor: false, publish: false });
   });
 });

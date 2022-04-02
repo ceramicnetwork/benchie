@@ -22,9 +22,10 @@ scenario("Load stream that is pinned", (perform) => {
     };
     const tile = await TileDocument.create(ceramic, content0, undefined, {
       anchor: false,
+      publish: false,
     });
     const content1 = { foo: `world-${Math.random()}` };
-    await tile.update(content1, undefined, { anchor: false });
+    await tile.update(content1, undefined, { anchor: false, publish: false });
     await ceramic.pin.add(tile.id);
     streamId = tile.id;
   });
