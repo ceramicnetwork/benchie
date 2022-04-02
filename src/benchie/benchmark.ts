@@ -24,6 +24,7 @@ export interface IScenarioParams {
   title: string;
   body: Task;
   method: IMethod;
+  tags: Set<string>;
   beforeAll?: Task;
   beforeEach?: Task;
   afterAll?: Task;
@@ -54,6 +55,7 @@ export class Method implements IMethod {
 
 export interface IScenario {
   title: string;
+  tags: Set<string>;
   run(): Promise<IScenarioStats>;
 }
 
@@ -65,6 +67,7 @@ export class Scenario implements IScenario {
   private readonly method: IMethod;
   private readonly body: Task;
   readonly title: string;
+  readonly tags: Set<string>;
 
   constructor(params: IScenarioParams) {
     this.beforeAll = params.beforeAll;
@@ -74,6 +77,7 @@ export class Scenario implements IScenario {
     this.method = params.method;
     this.body = params.body;
     this.title = params.title;
+    this.tags = params.tags;
   }
 
   async run(): Promise<IScenarioStats> {
@@ -108,11 +112,12 @@ export class ScenarioBuilder implements IScenarioBuilder {
       afterEach: this.params.afterEach,
       beforeAll: this.params.beforeAll,
       afterAll: this.params.afterAll,
+      tags: this.params.tags,
     });
   }
 
-  constructor(title: string) {
-    this.params = { title };
+  constructor(title: string, tags: Set<string>) {
+    this.params = { title, tags };
   }
 
   beforeAll(task: Task): void {
@@ -141,11 +146,27 @@ export class ScenarioBuilder implements IScenarioBuilder {
   }
 }
 
+function buildScenario(
+  builder: ScenarioBuilder,
+  fn: (builder: IScenarioBuilder) => void
+) {
+  fn(builder);
+  scenarios.push(builder.scenario);
+}
+
+export function tagged(...tags: string[]): { scenario: typeof scenario } {
+  return {
+    scenario: (title, fn) => {
+      const builder = new ScenarioBuilder(title, new Set(tags));
+      buildScenario(builder, fn);
+    },
+  };
+}
+
 export function scenario(
   title: string,
   fn: (builder: IScenarioBuilder) => void
 ) {
-  const builder = new ScenarioBuilder(title);
-  fn(builder);
-  scenarios.push(builder.scenario);
+  const builder = new ScenarioBuilder(title, new Set());
+  buildScenario(builder, fn);
 }

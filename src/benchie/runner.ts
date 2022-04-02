@@ -51,8 +51,15 @@ const getFiles = async (pattern: string): Promise<string[]> => {
   return allFiles.filter((file) => file.endsWith(".bench.js"));
 };
 
+function setIntersection<T>(a: Set<T>, b: Set<T>): Set<T> {
+  return new Set([...a].filter((entry) => b.has(entry)));
+}
+
 export class Runner {
-  constructor(readonly pattern: string) {}
+  constructor(
+    readonly pattern: string,
+    readonly tags: Set<string> | undefined
+  ) {}
 
   async run(): Promise<IScenarioResult[]> {
     const benchFiles = await getFiles(this.pattern);
@@ -67,11 +74,19 @@ export class Runner {
       const before = scenarios.length;
       await import(fullFilePath.href);
       const after = scenarios.length;
-      const added = scenarios.slice(before, after);
-      filenamesAndScenarios.push({
-        filepath: fullFilePath,
-        scenarios: added,
-      });
+      let added = scenarios.slice(before, after);
+      // Add only scenarios with tags
+      if (this.tags && this.tags.size > 0) {
+        added = added.filter(
+          (s) => setIntersection(s.tags, this.tags).size > 0
+        );
+      }
+      if (added.length > 0) {
+        filenamesAndScenarios.push({
+          filepath: fullFilePath,
+          scenarios: added,
+        });
+      }
     }
     const results: IScenarioResult[] = [];
     for (let file of filenamesAndScenarios) {

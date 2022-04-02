@@ -1,9 +1,9 @@
 import { createCeramic } from "./create-ceramic.js";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { CeramicApi } from "@ceramicnetwork/common";
-import { scenario } from "./benchie/benchmark.js";
+import { tagged } from "./benchie/benchmark.js";
 
-scenario("Update stream that is pinned", (perform) => {
+tagged("single-node").scenario("Update stream that is pinned", (perform) => {
   let ceramic: CeramicApi;
   let tile: TileDocument;
 
