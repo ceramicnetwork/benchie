@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push perf image
         env:
-          IMAGE_ID_1: "ceramicnetwork/perf"
+          IMAGE_ID_1: "ceramicnetwork/benchie"
         run: |
           EXTRA_TAGS=""
           if [[ "${{ env.ENV_TAG }}" == "prod" ]]; then
