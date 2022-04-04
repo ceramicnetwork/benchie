@@ -5,6 +5,8 @@ import { CeramicApi } from "@ceramicnetwork/common";
 import { scenario } from "./benchie/benchmark.js";
 
 scenario("Load stream over network", (perform) => {
+  perform.tagged("multi-node");
+
   let streamId: StreamID;
   let primaryCeramic: CeramicApi;
   let secondaryCeramic: CeramicApi;

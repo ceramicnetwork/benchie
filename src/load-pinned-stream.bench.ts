@@ -5,6 +5,8 @@ import { CeramicApi } from "@ceramicnetwork/common";
 import { scenario } from "./benchie/benchmark.js";
 
 scenario("Load stream that is pinned", (perform) => {
+  perform.tagged("single-node");
+
   let streamId: StreamID;
   let ceramic: CeramicApi;
 

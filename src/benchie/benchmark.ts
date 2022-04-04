@@ -10,6 +10,7 @@ export interface IMethodBuilder {
 }
 
 export interface IScenarioBuilder extends IMethodBuilder {
+  tagged(...tags: string[]): IScenarioBuilder;
   beforeEach(task: Task): void;
   beforeAll(task: Task): void;
   afterAll(task: Task): void;
@@ -24,6 +25,7 @@ export interface IScenarioParams {
   title: string;
   body: Task;
   method: IMethod;
+  tags: Set<string>;
   beforeAll?: Task;
   beforeEach?: Task;
   afterAll?: Task;
@@ -54,6 +56,7 @@ export class Method implements IMethod {
 
 export interface IScenario {
   title: string;
+  tags: Set<string>;
   run(): Promise<IScenarioStats>;
 }
 
@@ -65,6 +68,7 @@ export class Scenario implements IScenario {
   private readonly method: IMethod;
   private readonly body: Task;
   readonly title: string;
+  readonly tags: Set<string>;
 
   constructor(params: IScenarioParams) {
     this.beforeAll = params.beforeAll;
@@ -74,6 +78,7 @@ export class Scenario implements IScenario {
     this.method = params.method;
     this.body = params.body;
     this.title = params.title;
+    this.tags = params.tags;
   }
 
   async run(): Promise<IScenarioStats> {
@@ -108,11 +113,12 @@ export class ScenarioBuilder implements IScenarioBuilder {
       afterEach: this.params.afterEach,
       beforeAll: this.params.beforeAll,
       afterAll: this.params.afterAll,
+      tags: this.params.tags,
     });
   }
 
-  constructor(title: string) {
-    this.params = { title };
+  constructor(title: string, tags: Set<string>) {
+    this.params = { title, tags };
   }
 
   beforeAll(task: Task): void {
@@ -131,6 +137,11 @@ export class ScenarioBuilder implements IScenarioBuilder {
     this.params.afterEach = task;
   }
 
+  tagged(...tags: string[]): this {
+    this.params.tags = new Set(tags);
+    return this;
+  }
+
   run(task: Task): void {
     this.params.body = task;
   }
@@ -145,7 +156,7 @@ export function scenario(
   title: string,
   fn: (builder: IScenarioBuilder) => void
 ) {
-  const builder = new ScenarioBuilder(title);
+  const builder = new ScenarioBuilder(title, new Set());
   fn(builder);
   scenarios.push(builder.scenario);
 }

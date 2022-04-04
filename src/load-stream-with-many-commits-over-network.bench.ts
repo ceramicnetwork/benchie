@@ -7,6 +7,8 @@ import { scenario } from "./benchie/benchmark.js";
 const NUMBER_OF_COMMITS = 100;
 
 scenario("Load stream with many commits over network", (perform) => {
+  perform.tagged("multi-node");
+
   let streamId: StreamID;
   let primaryCeramic: CeramicApi;
   let secondaryCeramic: CeramicApi;

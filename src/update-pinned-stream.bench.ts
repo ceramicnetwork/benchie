@@ -4,6 +4,8 @@ import { CeramicApi } from "@ceramicnetwork/common";
 import { scenario } from "./benchie/benchmark.js";
 
 scenario("Update stream that is pinned", (perform) => {
+  perform.tagged("single-node");
+
   let ceramic: CeramicApi;
   let tile: TileDocument;
 

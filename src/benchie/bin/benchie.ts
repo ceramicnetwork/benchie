@@ -29,6 +29,7 @@ program
     "Pattern (filename, dirname, or glob) to match against files in your project to determine which ones to parse. You may need to quote this argument.",
     "."
   )
+  .option("-t, --tags [tags...]", "Scenario tags to run")
   .addOption(
     new Option("-f, --format [format]", "Output format")
       .choices(["text", "json"])
@@ -38,8 +39,9 @@ program
 
 async function main() {
   const options = program.opts();
-
-  const runner = new Runner(options.pattern);
+  const pattern = options.pattern;
+  const tags = options.tags ? new Set<string>(options.tags.map(String)) : undefined
+  const runner = new Runner(pattern, tags);
   const results = await runner.run();
   const currentDir = new URL(
     `file://${path.resolve(new URL(".", cwd).pathname)}/`
