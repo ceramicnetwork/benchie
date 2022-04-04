@@ -1,6 +1,18 @@
-function calculateMean(samples: number[]) {
+function calculateMean(samples: number[]): number {
   const sum = samples.reduce((a, b) => a + b, 0);
   return sum / samples.length;
+}
+
+function calculateMedian(values: number[]): number {
+  const sorted = values.slice().sort((a, b) => a - b);
+  const halfIndex = Math.floor(sorted.length / 2);
+
+  const hasCenterEntry = sorted.length % 2;
+  if (hasCenterEntry) {
+    return sorted[halfIndex];
+  } else {
+    return (values[halfIndex - 1] + values[halfIndex]) / 2.0;
+  }
 }
 
 // function calculateError(samples: number[], mean: number): number {
@@ -13,8 +25,9 @@ function calculateMean(samples: number[]) {
 // }
 
 export interface IScenarioStats {
-  samples: number[]
+  readonly samples: number[];
   readonly mean: number;
+  readonly median: number;
   // readonly error: number;
   readonly max: number;
   readonly min: number;
@@ -22,6 +35,7 @@ export interface IScenarioStats {
 
 export class ScenarioStats implements IScenarioStats {
   readonly mean: number;
+  readonly median: number;
   // readonly error: number;
   readonly max: number;
   readonly min: number;
@@ -31,5 +45,6 @@ export class ScenarioStats implements IScenarioStats {
     // this.error = calculateError(samples, this.mean);
     this.max = samples.reduce((a, b) => (a > b ? a : b));
     this.min = samples.reduce((a, b) => (a < b ? a : b));
+    this.median = calculateMedian(samples);
   }
 }
