@@ -23,6 +23,7 @@ export class ResultsOutputText {
       for (let r of results) {
         console.log(`  ${r.title}`);
         console.log(`    mean: ${r.stats.mean.toFixed(3)}`);
+        console.log(`    median: ${r.stats.median.toFixed(3)}`);
         console.log(`    min: ${r.stats.min.toFixed(3)}`);
         console.log(`    max: ${r.stats.max.toFixed(3)}`);
         // console.log(`    error: ${r.stats.error.toString(3)}`);
@@ -46,6 +47,7 @@ export class ResultsOutputJSON {
           [r.title]: {
             samples: r.stats.samples,
             mean: r.stats.mean.toFixed(3),
+            median: r.stats.median.toFixed(3),
             min: r.stats.min.toFixed(3),
             max: r.stats.max.toFixed(3),
           },
