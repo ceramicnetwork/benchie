@@ -65,6 +65,7 @@ We strive to make a scenario code similar to [Jest](https://jestjs.io) test. Gen
 import { scenario } from "./benchie/benchmark.js"; // If the scenario file is in `/src`
 
 scenario("Scenario Title", (perform) => {
+  perform.tagged('first', 'second'); // Optional. Can later run only scenarios with specific tags.
   // Place for ancillary stuff: variables, helper functions, etc.
 
   perform.beforeAll(async () => {
