@@ -45,9 +45,3 @@ jobs:
             --tag $IMAGE_ID_1:${{ github.sha }}  \
             --tag $IMAGE_ID_1:${{ env.BRANCH }}  \
             $EXTRA_TAGS
-      - name: Docker Hub Description
-        uses: peter-evans/dockerhub-description@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ceramicnetwork/benchie
